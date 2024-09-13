@@ -11,7 +11,8 @@ import ExpenseFilter from './expense-tracker/components/ExpenseFilter';
 import ExpenseForm from './expense-tracker/components/ExpenseForm';
 import categories from './expense-tracker/categories';
 import ProductList from './components/ProductList';
-import axios, { AxiosError, CanceledError } from 'axios'
+import { AxiosError } from 'axios'
+import apiClient, {CanceledError} from './services/api-client';
 
 interface User {
   id: number
@@ -167,7 +168,7 @@ function App() {
     const controller = new AbortController()
 
     setLoading(true)
-    axios.get<User[]>('https://jsonplaceholder.typicode.com/users', { signal: controller.signal})
+    apiClient.get<User[]>('/users', { signal: controller.signal})
       .then(res => {
         setUsers(res.data)
         setLoading(false)
@@ -200,7 +201,7 @@ function App() {
   const deleteUser = (user: User) => {
     const originalData = [...users]
     setUsers(users.filter((item) => item.id !== user.id))
-    axios.delete('https://jsonplaceholder.typicode.com/users/' + user.id)
+    apiClient.delete('/users/' + user.id)
     .catch((error) => {
       setErrors(error.message)
       setUsers(originalData)
@@ -211,7 +212,7 @@ function App() {
     const originalData = [...users]
     const newUser = {id: 0, name: 'Lijuan'}
     setUsers([newUser, ...users])
-    axios.post('https://jsonplaceholder.typicode.com/users', newUser)
+    apiClient.post('/users', newUser)
     .then(({data: savedUser}) => {
       setUsers([savedUser, ...users])
     })
@@ -226,7 +227,7 @@ function App() {
     const updateUser = {...user, name: user.name + "!"}
     setUsers(users.map(u => u.id === user.id ? updateUser : u))
 
-    axios.patch('https://jsonplaceholder.typicode.com/users/' + user.id, updateUser)
+    apiClient.patch('/users/' + user.id, updateUser)
     .catch((error) => {
       setErrors(error.message)
       setUsers(originalData)
