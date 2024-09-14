@@ -13,7 +13,7 @@ import categories from './expense-tracker/categories';
 import ProductList from './components/ProductList';
 import { AxiosError } from 'axios'
 import apiClient, {CanceledError} from './services/api-client';
-import userService, { User } from './services/UserService';
+import UserService, { User } from './services/UserService';
 
 function App() {
   // let items = [
@@ -164,7 +164,7 @@ function App() {
     const controller = new AbortController()
 
     setLoading(true)
-    const {request, cancel} = userService.getAllUsers()
+    const {request, cancel} = UserService.getAll<User>()
       request.then(res => {
         setUsers(res.data)
         setLoading(false)
@@ -197,7 +197,7 @@ function App() {
   const deleteUser = (user: User) => {
     const originalData = [...users]
     setUsers(users.filter((item) => item.id !== user.id))
-    userService.deleteUser(user.id).catch((error) => {
+    UserService.delete(user.id).catch((error) => {
       setErrors(error.message)
       setUsers(originalData)
     })
@@ -207,7 +207,7 @@ function App() {
     const originalData = [...users]
     const newUser = {id: 0, name: 'Lijuan'}
     setUsers([newUser, ...users])
-    userService.addUser(newUser)
+    UserService.add(newUser)
     .then(({data: savedUser}) => {
       setUsers([savedUser, ...users])
     })
@@ -222,7 +222,7 @@ function App() {
     const updateUser = {...user, name: user.name + "!"}
     setUsers(users.map(u => u.id === user.id ? updateUser : u))
 
-    userService.updateUser(updateUser)
+    UserService.update(updateUser)
     .catch((error) => {
       setErrors(error.message)
       setUsers(originalData)
