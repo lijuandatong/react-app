@@ -13,11 +13,7 @@ import categories from './expense-tracker/categories';
 import ProductList from './components/ProductList';
 import { AxiosError } from 'axios'
 import apiClient, {CanceledError} from './services/api-client';
-
-interface User {
-  id: number
-  name: string
-}
+import userService, { User } from './services/UserService';
 
 function App() {
   // let items = [
@@ -168,8 +164,8 @@ function App() {
     const controller = new AbortController()
 
     setLoading(true)
-    apiClient.get<User[]>('/users', { signal: controller.signal})
-      .then(res => {
+    const {request, cancel} = userService.getAllUsers()
+      request.then(res => {
         setUsers(res.data)
         setLoading(false)
       })
@@ -182,7 +178,7 @@ function App() {
       //   setLoading(false)  // 可以在finally中统一做，但是在strict mode下这段代码不起作用
       // })
     
-      return () => controller.abort()
+      return () => cancel()
 
 
     // const fetchData = async () => {
@@ -201,8 +197,7 @@ function App() {
   const deleteUser = (user: User) => {
     const originalData = [...users]
     setUsers(users.filter((item) => item.id !== user.id))
-    apiClient.delete('/users/' + user.id)
-    .catch((error) => {
+    userService.deleteUser(user.id).catch((error) => {
       setErrors(error.message)
       setUsers(originalData)
     })
@@ -212,7 +207,7 @@ function App() {
     const originalData = [...users]
     const newUser = {id: 0, name: 'Lijuan'}
     setUsers([newUser, ...users])
-    apiClient.post('/users', newUser)
+    userService.addUser(newUser)
     .then(({data: savedUser}) => {
       setUsers([savedUser, ...users])
     })
@@ -227,7 +222,7 @@ function App() {
     const updateUser = {...user, name: user.name + "!"}
     setUsers(users.map(u => u.id === user.id ? updateUser : u))
 
-    apiClient.patch('/users/' + user.id, updateUser)
+    userService.updateUser(updateUser)
     .catch((error) => {
       setErrors(error.message)
       setUsers(originalData)
