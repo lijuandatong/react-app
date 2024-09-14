@@ -14,6 +14,7 @@ import ProductList from './components/ProductList';
 import { AxiosError } from 'axios'
 import apiClient, {CanceledError} from './services/api-client';
 import UserService, { User } from './services/UserService';
+import useUsers from './hooks/useUsers';
 
 function App() {
   // let items = [
@@ -156,43 +157,7 @@ function App() {
   // )
 
 
-  const [users, setUsers] = useState<User[]>([])
-  const [errors, setErrors] = useState('')
-  const [isLoading, setLoading] = useState(false)
-
-  useEffect(() => {
-    const controller = new AbortController()
-
-    setLoading(true)
-    const {request, cancel} = UserService.getAll<User>()
-      request.then(res => {
-        setUsers(res.data)
-        setLoading(false)
-      })
-      .catch(error => {
-        if (error instanceof CanceledError) return
-        setErrors(error.message)
-        setLoading(false)
-      })
-      // .finally(() =>{
-      //   setLoading(false)  // 可以在finally中统一做，但是在strict mode下这段代码不起作用
-      // })
-    
-      return () => cancel()
-
-
-    // const fetchData = async () => {
-    //   try {
-    //     const res = await axios.get<User[]>('https://jsonplaceholder.typicode.com/users')
-    //     setUsers(res.data)
-    //   } catch (error) {
-    //     setErrors((error as AxiosError).message)
-    //   }
-    // }
-
-    // fetchData()
-
-  }, [])
+  const {users, errors, isLoading, setUsers, setErrors} = useUsers()
 
   const deleteUser = (user: User) => {
     const originalData = [...users]
