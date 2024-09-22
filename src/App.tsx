@@ -15,6 +15,7 @@ import { AxiosError } from 'axios'
 import apiClient, {CanceledError} from './services/api-client';
 import UserService, { User } from './services/UserService';
 import useUsers from './hooks/useUsers';
+import TodoList from './components/TodoList';
 
 function App() {
   // let items = [
@@ -157,58 +158,64 @@ function App() {
   // )
 
 
-  const {users, errors, isLoading, setUsers, setErrors} = useUsers()
+  // user的增删改查的操作
+  // const {users, errors, isLoading, setUsers, setErrors} = useUsers()
 
-  const deleteUser = (user: User) => {
-    const originalData = [...users]
-    setUsers(users.filter((item) => item.id !== user.id))
-    UserService.delete(user.id).catch((error) => {
-      setErrors(error.message)
-      setUsers(originalData)
-    })
-  }
+  // const deleteUser = (user: User) => {
+  //   const originalData = [...users]
+  //   setUsers(users.filter((item) => item.id !== user.id))
+  //   UserService.delete(user.id).catch((error) => {
+  //     setErrors(error.message)
+  //     setUsers(originalData)
+  //   })
+  // }
 
-  const addUser = () => {
-    const originalData = [...users]
-    const newUser = {id: 0, name: 'Lijuan'}
-    setUsers([newUser, ...users])
-    UserService.add(newUser)
-    .then(({data: savedUser}) => {
-      setUsers([savedUser, ...users])
-    })
-    .catch((error) => {
-      setErrors(error.message)
-      setUsers(originalData)
-    })
-  }
+  // const addUser = () => {
+  //   const originalData = [...users]
+  //   const newUser = {id: 0, name: 'Lijuan'}
+  //   setUsers([newUser, ...users])
+  //   UserService.add(newUser)
+  //   .then(({data: savedUser}) => {
+  //     setUsers([savedUser, ...users])
+  //   })
+  //   .catch((error) => {
+  //     setErrors(error.message)
+  //     setUsers(originalData)
+  //   })
+  // }
 
-  const updateUser = (user: User) => {
-    const originalData = [...users]
-    const updateUser = {...user, name: user.name + "!"}
-    setUsers(users.map(u => u.id === user.id ? updateUser : u))
+  // const updateUser = (user: User) => {
+  //   const originalData = [...users]
+  //   const updateUser = {...user, name: user.name + "!"}
+  //   setUsers(users.map(u => u.id === user.id ? updateUser : u))
 
-    UserService.update(updateUser)
-    .catch((error) => {
-      setErrors(error.message)
-      setUsers(originalData)
-    })
-  }
+  //   UserService.update(updateUser)
+  //   .catch((error) => {
+  //     setErrors(error.message)
+  //     setUsers(originalData)
+  //   })
+  // }
 
+  // return (
+  //   <div>
+  //     {errors && <p className='text-danger'>{errors}</p>}
+  //     {isLoading && <div className="spinner-border"></div>}
+  //     <button className="btn btn-primary" onClick={addUser}>Add</button>
+  //     <ul className="list-group">
+  //       {users.map((user) => 
+  //       <li key={user.id} className="list-group-item d-flex justify-content-between">
+  //         {user.name}
+  //         <div>
+  //           <button className="btn btn-outline-primary" onClick={() => {updateUser(user)}}>Update</button>
+  //           <button className="btn btn-outline-danger" onClick={() => {deleteUser(user)}}>Delete</button>
+  //         </div>
+  //         </li>)}
+  //     </ul>
+  //   </div>
+  // )
   return (
     <div>
-      {errors && <p className='text-danger'>{errors}</p>}
-      {isLoading && <div className="spinner-border"></div>}
-      <button className="btn btn-primary" onClick={addUser}>Add</button>
-      <ul className="list-group">
-        {users.map((user) => 
-        <li key={user.id} className="list-group-item d-flex justify-content-between">
-          {user.name}
-          <div>
-            <button className="btn btn-outline-primary" onClick={() => {updateUser(user)}}>Update</button>
-            <button className="btn btn-outline-danger" onClick={() => {deleteUser(user)}}>Delete</button>
-          </div>
-          </li>)}
-      </ul>
+      <TodoList></TodoList>
     </div>
   )
 
