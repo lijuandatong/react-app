@@ -15,7 +15,8 @@ import { AxiosError } from 'axios'
 import apiClient, {CanceledError} from './services/api-client';
 import UserService, { User } from './services/UserService';
 import useUsers from './hooks/useUsers';
-import TodoList from './components/TodoList';
+import TodoList from './react-query/TodoList';
+import PostList from './react-query/PostList';
 
 function App() {
   // let items = [
@@ -215,7 +216,7 @@ function App() {
   // )
   return (
     <div>
-      <TodoList></TodoList>
+      <PostList />
     </div>
   )
 
