@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import usePosts from './hooks/usePosts'
+import usePosts, { QueryObject } from './hooks/usePosts'
 
 const PostList = () => {
+    const pageSize = 10
     const [userId, setUserId] = useState<number>()
-    const {data: posts, isLoading, error} = usePosts(userId)
+    const [page, setPage] =  useState<number>(1)
+    const {data: posts, isLoading, error} = usePosts({userId, page, pageSize})
 
     if(isLoading) return <p>loading...</p>
 
@@ -20,6 +22,8 @@ const PostList = () => {
             <ul className="list-group">
                 {posts?.map(post => <li key={post.id} className="list-group-item">{post.title}</li>)}
             </ul>
+            <button disabled={page === 1} className="btn btn-primary my-3" onClick={() => setPage(page - 1)}>Previous</button>
+            <button className="btn btn-primary my-3 ms-1" onClick={() => setPage(page + 1)}>Next</button>
         </>
     )
 }
