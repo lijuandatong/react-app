@@ -1,11 +1,12 @@
+import React from 'react'
 import { useState } from 'react'
 import usePosts, { QueryObject } from './hooks/usePosts'
 
 const PostList = () => {
     const pageSize = 10
     const [userId, setUserId] = useState<number>()
-    const [page, setPage] =  useState<number>(1)
-    const {data: posts, isLoading, error} = usePosts({userId, page, pageSize})
+    // const [page, setPage] =  useState<number>(1)
+    const { data, isLoading, error, fetchNextPage, isFetchingNextPage } = usePosts({userId, pageSize})
 
     if(isLoading) return <p>loading...</p>
 
@@ -20,10 +21,16 @@ const PostList = () => {
                 <option value="3">user3</option>
             </select>
             <ul className="list-group">
-                {posts?.map(post => <li key={post.id} className="list-group-item">{post.title}</li>)}
+                {data.pages.map((page, index) => 
+                    <React.Fragment key={index}>
+                        {page.map(page => <li key={page.id} className="list-group-item">{page.title}</li>)}
+                    </React.Fragment>
+                )}
             </ul>
-            <button disabled={page === 1} className="btn btn-primary my-3" onClick={() => setPage(page - 1)}>Previous</button>
-            <button className="btn btn-primary my-3 ms-1" onClick={() => setPage(page + 1)}>Next</button>
+            <button 
+            disabled={isFetchingNextPage} 
+            className="btn btn-primary my-3 ms-1" 
+            onClick={() => fetchNextPage()}>{isFetchingNextPage ? 'loading...' : 'Load More'}</button>
         </>
     )
 }
