@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import React, { FormEvent, InputHTMLAttributes, useRef, useState } from 'react'
 import useAddTodo from './hooks/useAddTodo'
-import { Todo } from './hooks/useTodoList'
 
 const TodoForm = () => {
     // use Ref hook to access the value of the input fields
