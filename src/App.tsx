@@ -17,6 +17,7 @@ import UserService, { User } from './services/UserService';
 import useUsers from './hooks/useUsers';
 import TodoList from './react-query/TodoList';
 import PostList from './react-query/PostList';
+import TodoForm from './react-query/TodoForm';
 
 function App() {
   // let items = [
@@ -216,7 +217,8 @@ function App() {
   // )
   return (
     <div>
-      <PostList />
+      <TodoForm />
+      <TodoList />
     </div>
   )
 

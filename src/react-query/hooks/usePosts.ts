@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import axios from "axios"
 
-interface Post {
+export interface Post {
     id: number
     userId: number
     title: string
