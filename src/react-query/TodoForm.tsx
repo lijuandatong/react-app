@@ -3,6 +3,9 @@ import axios from 'axios'
 import React, { FormEvent, InputHTMLAttributes, useRef, useState } from 'react'
 import { Todo } from './hooks/useTodoList'
 
+interface AddTodoContext {
+    previousTodos: Todo[]
+}
 
 const TodoForm = () => {
     // use Ref hook to access the value of the input fields
@@ -12,11 +15,18 @@ const TodoForm = () => {
 
     const queryClient = useQueryClient()
 
-    const addTodo = useMutation<Todo, Error, Todo>({
+    const addTodo = useMutation<Todo, Error, Todo, AddTodoContext>({
         mutationFn: (todo: Todo) => 
             axios
             .post<Todo>('https://jsonplaceholder.typicode.com/todos', todo)
             .then(res => res.data),
+        onMutate: (newTodo) => {
+            const previousTodos = queryClient.getQueryData<Todo[]>(['todos']) || []
+
+            queryClient.setQueryData<Todo[]>(['todos'], todos => [newTodo, ...(todos || [])])
+
+            return { previousTodos }
+        },
         onSuccess: (saveTodo, newTodo) => {
             // approach 1: invalidating the cache
             // queryClient.invalidateQueries({
@@ -24,10 +34,14 @@ const TodoForm = () => {
             // })
             
             // approach 2: updating the data in cache
-            queryClient.setQueryData<Todo[]>(['todos'], todos => [saveTodo, ...(todos || [])])
+            queryClient.setQueryData<Todo[]>(['todos'], todos => todos?.map(todo => todo === newTodo ? saveTodo : todo))
 
             // 清空input
             if(ref.current) ref.current.value = ''
+        },
+        onError: (error, newTodo, context) => {
+            if(!context) return
+            queryClient.setQueryData<Todo[]>(['todos'], context.previousTodos)
         }
         
     })
