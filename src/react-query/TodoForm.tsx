@@ -8,7 +8,7 @@ const TodoForm = () => {
     // use Ref hook to access the value of the input fields
     // common practice to set null
     // set a type for useRef
-    const postRef = useRef<HTMLInputElement>(null)
+    const ref = useRef<HTMLInputElement>(null)
 
     const queryClient = useQueryClient()
 
@@ -25,6 +25,9 @@ const TodoForm = () => {
             
             // approach 2: updating the data in cache
             queryClient.setQueryData<Todo[]>(['todos'], todos => [saveTodo, ...(todos || [])])
+
+            // 清空input
+            if(ref.current) ref.current.value = ''
         }
         
     })
@@ -35,10 +38,10 @@ const TodoForm = () => {
         <form className='row mb-3' onSubmit={event => {
             event.preventDefault()
             // 当postRef.current存在，并且postRef.current.value为ture，即有值的时候
-            if(postRef.current && postRef.current.value){
+            if(ref.current && ref.current.value){
                 addTodo.mutate({ // mutate方法会触发上面的mutationFn提交数据
                     id: 0,
-                    title: postRef.current?.value,
+                    title: ref.current?.value,
                     completed: false,
                     userId: 1
                 })
@@ -46,12 +49,12 @@ const TodoForm = () => {
         }}>
             <div className="col">
                 <input 
-                    ref={postRef}
+                    ref={ref}
                     type="text" 
                     className="form-control" />
             </div>
             <div className='col'>
-                <button className="btn btn-primary">Add</button>
+                <button disabled={addTodo.isLoading} className="btn btn-primary">{addTodo.isLoading ? 'adding' : 'add'}</button>
             </div>
             
         </form>
