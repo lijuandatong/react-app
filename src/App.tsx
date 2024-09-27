@@ -1,7 +1,7 @@
+import Counter from './state-management/counter/Counter';
 import HomePage from './state-management/HomePage';
 import NavBar from './state-management/NavBar';
-import AuthProvider from './state-management/auth/AuthProvider';
-import TasksProvider from './state-management/task/TasksProvider';
+import { TasksProvider } from './state-management/task';
 
 function App() {
   // let items = [
@@ -210,10 +210,9 @@ function App() {
   return (
     <div>
       <TasksProvider>
-        <AuthProvider>
+          <Counter />
           <NavBar />
           <HomePage />
-        </AuthProvider>
       </TasksProvider>
       
     </div>
