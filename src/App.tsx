@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useRef, useState } from 'react'
+import { MouseEvent, useEffect, useReducer, useRef, useState } from 'react'
 import Alert from './components/Alert'
 import Button from './components/Button'
 import ListGroup from './components/ListGroup'
@@ -19,6 +19,12 @@ import TodoList from './react-query/TodoList';
 import PostList from './react-query/PostList';
 import TodoForm from './react-query/TodoForm';
 import LoginStatus from './state-management/LoginStatus';
+import taskReducer from './state-management/reducers/taskReducer';
+import authReducer from './state-management/reducers/authReducer';
+import AuthContext from './state-management/context/AuthContext';
+import HomePage from './state-management/HomePage';
+import TaskContext from './state-management/context/TaskContext';
+import NavBar from './state-management/NavBar';
 
 function App() {
   // let items = [
@@ -223,10 +229,20 @@ function App() {
   //     <TodoList />
   //   </div>
   // )
+
+  const [user, dispatchUser] = useReducer(authReducer, '')
+  const [tasks, dispatchTasks] = useReducer(taskReducer, [])
+
   
   return (
     <div>
-      <LoginStatus />
+      <TaskContext.Provider value={{tasks, dispatch: dispatchTasks}}>
+      <AuthContext.Provider value={{user, dispatch: dispatchUser}}>
+        <NavBar />
+        <HomePage />
+      </AuthContext.Provider>
+      </TaskContext.Provider>
+      
     </div>
   )
 
