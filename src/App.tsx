@@ -25,6 +25,8 @@ import AuthContext from './state-management/context/AuthContext';
 import HomePage from './state-management/HomePage';
 import TaskContext from './state-management/context/TaskContext';
 import NavBar from './state-management/NavBar';
+import AuthProvider from './state-management/AuthProvider';
+import TasksProvider from './state-management/TasksProvider';
 
 function App() {
   // let items = [
@@ -229,19 +231,15 @@ function App() {
   //     <TodoList />
   //   </div>
   // )
-
-  const [user, dispatchUser] = useReducer(authReducer, '')
-  const [tasks, dispatchTasks] = useReducer(taskReducer, [])
-
   
   return (
     <div>
-      <TaskContext.Provider value={{tasks, dispatch: dispatchTasks}}>
-      <AuthContext.Provider value={{user, dispatch: dispatchUser}}>
-        <NavBar />
-        <HomePage />
-      </AuthContext.Provider>
-      </TaskContext.Provider>
+      <TasksProvider>
+        <AuthProvider>
+          <NavBar />
+          <HomePage />
+        </AuthProvider>
+      </TasksProvider>
       
     </div>
   )
