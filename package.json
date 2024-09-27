@@ -20,11 +20,13 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
     "react-icons": "^4.7.1",
+    "simple-zustand-devtools": "^1.1.0",
     "styled-components": "^6.1.13",
     "zod": "^3.23.8",
     "zustand": "^4.3.7"
   },
   "devDependencies": {
+    "@types/node": "^22.7.4",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
