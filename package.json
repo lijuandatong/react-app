@@ -20,6 +20,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
     "react-icons": "^4.7.1",
+    "react-router-dom": "^6.10.0",
     "simple-zustand-devtools": "^1.1.0",
     "styled-components": "^6.1.13",
     "zod": "^3.23.8",
