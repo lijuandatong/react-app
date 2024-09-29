@@ -1,10 +1,10 @@
 import UserList from './UserList';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import useAuth from './hooks/useAuth';
 
-const UsersPage = () => {
- 
 
+const UsersPage = () => {
+  
   return (
     <div className="row">
       <div className="col">
